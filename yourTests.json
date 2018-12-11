@@ -1,0 +1,58 @@
+[
+  {
+    "name": "t6_end_garbage_simple",
+    "code": "file",
+    "heap": 11,
+    "result": {
+      "value": "(31, 32)"
+    }
+  },
+  {
+    "name": "t6_end_garbage_simple",
+    "code": "file",
+    "heap": 10,
+    "result": {
+      "value": "(31, 32)"
+    }
+  },
+  {
+    "name": "t6_nested_tuple_end_garbage_simple",
+    "code": "file",
+    "heap": 16,
+    "result": {
+      "value": "(1, 10)"
+    }
+  },
+  {
+    "name": "t6_nested_tuple_redirect",
+    "code": "file",
+    "heap": 16,
+    "result": {
+      "value": "(1, 10)"
+    }
+  },
+  {
+    "name": "t6_transitive_reachability",
+    "code": "file",
+    "heap": 18,
+    "result": {
+      "value": "(1000, (3, (4, (5, false))))"
+    }
+  },
+  {
+    "name": "t6_nested_exist",
+    "code": "file",
+    "heap": 18,
+    "result": {
+      "value": "9"
+    }
+  },
+  {
+    "name": "t6_nested_exist",
+    "code": "file",
+    "heap": 17,
+    "result": {
+      "failure": "out of memory"
+    }
+  }
+]
