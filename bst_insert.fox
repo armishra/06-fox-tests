@@ -1,0 +1,39 @@
+def node(val):
+    (val, false, false)
+
+def val(node):
+    if node == false:
+        false
+    else:
+        node[0]
+
+def left(node):
+    if node == false:
+        false
+    else:
+        node[1]
+
+def right(node):
+    if node == false:
+        false
+    else:
+        node[2]
+
+def insert(node, val):
+    if node == false:
+        node(val)
+    else:
+        if val < val(node):
+            if left(node) == false:
+                (val(node), node(val), right(node))
+            else:
+                (val(node), insert(left(node), val), right(node))
+        else:
+            if right(node) == false:
+                (val(node), left(node), node(val))
+            else:
+                (val(node), left(node), insert(right(node), val))
+
+
+insert(insert(insert(insert(node(2), 4), 6), 0), 1)
+

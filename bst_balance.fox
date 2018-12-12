@@ -1,0 +1,276 @@
+def divide(divideidend, divideisor, quotient):
+    if quotient * divideisor > divideidend:
+        quotient - 1
+    else:
+        if quotient * divideisor == divideidend:
+            quotient
+        else:
+            divide(divideidend, divideisor, quotient + 1)
+
+def div(dividend, divisor):
+    if divisor == 0:
+        false
+    else:
+        divide(dividend, divisor, 0)
+
+def list(x):
+    (x, false)
+
+def head(list):
+    if list == false:
+        false
+    else:
+        list[0]
+
+def tail(list):
+    if list == false:
+        false
+    else:
+        list[1]
+
+def cons(x, list):
+    (x, list)
+
+def prepend(list, x):
+    cons(x, list)
+
+def append(list, x):
+    if list == false:
+        (x, false)
+    else:
+        (head(list), append(tail(list), x))
+
+def length(list):
+    if list == false:
+        0
+    else:
+        1 + length(tail(list))
+
+def reverseHelper(list, acc):
+    if list == false:
+        acc
+    else:
+        reverseHelper(tail(list), cons(head(list), acc))
+
+def reverse(list):
+    if list == false:
+        false
+    else:
+        reverseHelper(list, false)
+
+def concat(l1, l2):
+    if l1 == false:
+        l2
+    else:
+        (head(l1), concat(tail(l1), l2))
+
+def equals(l1, l2):
+    if length(l1) == length(l2):
+        if l1 == false:
+            true
+        else:
+            if head(l1) == head(l2):
+                equals(tail(l1), tail(l2))
+            else:
+                false
+    else:
+        false
+
+def greaterFilter(list, x):
+    if list == false:
+        false
+    else:
+        let
+            head = head(list),
+            tail = tail(list)
+        in
+            if head < x:
+                greaterFilter(tail, x)
+            else:
+                cons(head, greaterFilter(tail, x))
+
+def lessFilter(list, x):
+    if list == false:
+        false
+    else:
+        let
+            head = head(list),
+            tail = tail(list)
+        in
+            if head < x:
+                cons(head, lessFilter(tail, x))
+            else:
+                lessFilter(tail, x)
+
+def sort(list):
+    if list == false:
+        false
+    else:
+        let
+            pivot = head(list),
+            tail  = tail(list),
+            left  = sort(lessFilter(tail, pivot)),
+            right = sort(greaterFilter(tail, pivot))
+        in
+            concat(left, cons(pivot, right))
+
+def access(list, pos):
+    if pos < length(list):
+        if pos == 0:
+            head(list)
+        else:
+            access(tail(list), pos - 1)
+    else:
+        false
+
+def slice(list, beg, end):
+    let
+        head = head(list),
+        tail = tail(list)
+    in
+        if beg < 0:
+            false
+        else:
+            if end == 0:
+                false
+            else:
+                if length(list) == 0:
+                    false
+                else:
+                    if beg == 0:
+                        cons(head, slice(tail, 0, end - 1))
+                    else:
+                        slice(tail, beg - 1, end - 1)
+
+
+def node(val):
+    (val, false, false)
+
+def val(node):
+    if node == false:
+        false
+    else:
+        node[0]
+
+def left(node):
+    if node == false:
+        false
+    else:
+        node[1]
+
+def right(node):
+    if node == false:
+        false
+    else:
+        node[2]
+
+def insert(node, val):
+    if node == false:
+        node(val)
+    else:
+        if val < val(node):
+            if left(node) == false:
+                (val(node), node(val), right(node))
+            else:
+                (val(node), insert(left(node), val), right(node))
+        else:
+            if right(node) == false:
+                (val(node), left(node), node(val))
+            else:
+                (val(node), left(node), insert(right(node), val))
+
+def lookup(node, val):
+    if node == false:
+        false
+    else:
+        if val == val(node):
+            true
+        else:
+            if val < val(node):
+                lookup(left(node), val)
+            else:
+                lookup(right(node), val)
+
+def inTraverse(root):
+    if root == false:
+        false
+    else:
+        let
+            left  = inTraverse(left(root)),
+            val   = val(root),
+            right = inTraverse(right(root))
+        in
+            cons(val, concat(left, right))
+
+def preTraverse(root):
+    if root == false:
+        false
+    else:
+        let
+            left  = preTraverse(left(root)),
+            val   = val(root),
+            right = preTraverse(right(root))
+        in
+            concat(left, cons(val, right))
+
+def listToTree(list):
+    if list == false:
+        false
+    else:
+        let
+            head = head(list),
+            tail = tail(list)
+        in
+            insert(listToTree(tail), head)
+
+def treeCopy(root):
+    let
+        nodes = inTraverse(root),
+        reverse = reverse(nodes)
+    in
+        listToTree(reverse)
+
+def listToBalancedTree(list):
+    if length(list) > 1:
+        let
+            len   = length(list),
+            mid   = div(len, 2),
+            pivot = access(list, mid),
+            left  = slice(list, 0, mid),
+            right = slice(list, mid + 1, len)
+        in
+            (pivot, listToBalancedTree(left), listToBalancedTree(right))
+    else:
+        if length(list) == 1:
+            node(head(list))
+        else:
+            false
+
+def fibsHelper(fibs, n):
+    let
+        len = length(fibs),
+        f1  = len - 1,
+        f2  = len - 2
+    in
+        if len == n:
+            fibs
+        else:
+            let
+                newFibs = if len < 2:
+                              append(fibs, 1)
+                          else:
+                              append(fibs, access(fibs, f1) + access(fibs, f2))
+            in
+                fibsHelper(newFibs, n)
+
+def fibs(n):
+    fibsHelper(false, n)
+
+
+def balance(tree):
+    listToBalancedTree(preTraverse(tree))
+
+let
+    tree = print(listToTree(fibs(20)))
+in
+    balance(tree)

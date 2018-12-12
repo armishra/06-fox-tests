@@ -1,0 +1,202 @@
+def list(x):
+    (x, false)
+
+def head(list):
+    if list == false:
+        false
+    else:
+        list[0]
+
+def tail(list):
+    if list == false:
+        false
+    else:
+        list[1]
+
+def cons(x, list):
+    (x, list)
+
+def prepend(list, x):
+    cons(x, list)
+
+def append(list, x):
+    if list == false:
+        (x, false)
+    else:
+        (head(list), append(tail(list), x))
+
+def length(list):
+    if list == false:
+        0
+    else:
+        1 + length(tail(list))
+
+def reverseHelper(list, acc):
+    if list == false:
+        acc
+    else:
+        reverseHelper(tail(list), cons(head(list), acc))
+
+def reverse(list):
+    if list == false:
+        false
+    else:
+        reverseHelper(list, false)
+
+def concat(l1, l2):
+    if l1 == false:
+        l2
+    else:
+        (head(l1), concat(tail(l1), l2))
+
+def equals(l1, l2):
+    if length(l1) == length(l2):
+        if l1 == false:
+            true
+        else:
+            if head(l1) == head(l2):
+                equals(tail(l1), tail(l2))
+            else:
+                false
+    else:
+        false
+
+def greaterFilter(list, x):
+    if list == false:
+        false
+    else:
+        let
+            head = head(list),
+            tail = tail(list)
+        in
+            if head < x:
+                greaterFilter(tail, x)
+            else:
+                cons(head, greaterFilter(tail, x))
+
+def lessFilter(list, x):
+    if list == false:
+        false
+    else:
+        let
+            head = head(list),
+            tail = tail(list)
+        in
+            if head < x:
+                cons(head, lessFilter(tail, x))
+            else:
+                lessFilter(tail, x)
+
+def sort(list):
+    if list == false:
+        false
+    else:
+        let
+            pivot = head(list),
+            tail  = tail(list),
+            left  = sort(lessFilter(tail, pivot)),
+            right = sort(greaterFilter(tail, pivot))
+        in
+            concat(left, cons(pivot, right))
+
+def access(list, pos):
+    if pos < length(list):
+        if pos == 0:
+            head(list)
+        else:
+            access(tail(list), pos - 1)
+    else:
+        false
+
+def node(val):
+    (val, false, false)
+
+def val(node):
+    if node == false:
+        false
+    else:
+        node[0]
+
+def left(node):
+    if node == false:
+        false
+    else:
+        node[1]
+
+def right(node):
+    if node == false:
+        false
+    else:
+        node[2]
+
+def insert(node, val):
+    if node == false:
+        node(val)
+    else:
+        if val < val(node):
+            if left(node) == false:
+                (val(node), node(val), right(node))
+            else:
+                (val(node), insert(left(node), val), right(node))
+        else:
+            if right(node) == false:
+                (val(node), left(node), node(val))
+            else:
+                (val(node), left(node), insert(right(node), val))
+
+def lookup(node, val):
+    if node == false:
+        false
+    else:
+        if val == val(node):
+            true
+        else:
+            if val < val(node):
+                lookup(left(node), val)
+            else:
+                lookup(right(node), val)
+
+def inTraverse(root):
+    if root == false:
+        false
+    else:
+        let
+            left  = inTraverse(left(root)),
+            val   = val(root),
+            right = inTraverse(right(root))
+        in
+            cons(val, concat(left, right))
+
+def preTraverse(root):
+    if root == false:
+        false
+    else:
+        let
+            left  = preTraverse(left(root)),
+            val   = val(root),
+            right = preTraverse(right(root))
+        in
+            concat(left, cons(val, right))
+
+def listToTree(list):
+    if list == false:
+        false
+    else:
+        let
+            head = head(list),
+            tail = tail(list)
+        in
+            insert(listToTree(tail), head)
+
+def treeCopy(root):
+    let
+        nodes = inTraverse(root),
+        reverse = reverse(nodes)
+    in
+        listToTree(reverse)
+
+let
+    list = print(cons(2, cons(4, cons(6, cons(0, cons(1, false)))))),
+    tree = print(listToTree(list))
+in
+    preTraverse(tree)
